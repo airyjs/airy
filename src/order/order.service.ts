@@ -1,7 +1,10 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
-import { Order } from './order.entity';
+import GRPCError from 'grpc-error';
+import { status } from 'grpc';
+
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ReadOrderDto } from './dto/read-order.dto';
+import { Order } from './order.entity';
 
 @Injectable()
 export class OrderService {
@@ -13,12 +16,13 @@ export class OrderService {
     return this.ordersRepository.create(createOrderDto);
   }
 
-  public async read({ uuid }: ReadOrderDto): Promise<Order> {
-    const order = await this.ordersRepository.findByPk(uuid);
-    // const order = await Order.findByPk(uuid);
-    if (order !== null) {
+  public read({ uuid }: ReadOrderDto): Promise<Order> {
+    return this.ordersRepository.findByPk(uuid).then(order => {
+      if (order === null) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        throw new GRPCError({ status_code: status.NOT_FOUND });
+      }
       return order;
-    }
-    return {} as Order;
+    });
   }
 }
