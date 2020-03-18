@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package airy.storage;
+
+
+import "google/protobuf/empty.proto";
+
+service OrderService {
+  rpc Create (CreateOrderDto) returns (Order);
+  rpc Read (ReadOrderDto) returns (Order);
+  rpc Update (Order) returns (Order);
+  rpc Delete (ReadOrderDto) returns (google.protobuf.Empty);
+}
+
+message Order {
+  string uuid = 1;
+  string name = 2;
+  int32 count = 3;
+}
+
+message CreateOrderDto {
+  string name = 1;
+  int32 count = 2;
+}
+
+message ReadOrderDto {
+  string uuid = 1;
+}
