@@ -2,8 +2,8 @@ import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
 import { OrderService } from './order.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { ReadOrderDto } from './dto/read-order.dto';
+import type { CreateOrderDto } from './dto/create-order.dto';
+import type { ReadOrderDto } from './dto/read-order.dto';
 
 @Controller()
 export class OrderController {

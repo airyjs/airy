@@ -1,3 +1,3 @@
-export class ReadOrderDto {
+export interface ReadOrderDto {
   readonly uuid: string;
 }

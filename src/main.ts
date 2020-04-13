@@ -1,14 +1,14 @@
 import { join } from 'path';
 import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { Transport, GrpcOptions } from '@nestjs/microservices';
 
+import type { GrpcOptions } from '@nestjs/microservices';
+
+import { Airy } from './core/airy/airy.microservice';
 import { OrderModule } from './order/order.module';
 
 const logger = new Logger('Main');
 
-const microserviceOptions: GrpcOptions = {
-  transport: Transport.GRPC,
+const grpcOptions: GrpcOptions = {
   options: {
     package: 'airy.storage',
     url: 'localhost:3000',
@@ -17,7 +17,8 @@ const microserviceOptions: GrpcOptions = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<GrpcOptions>(OrderModule, microserviceOptions);
+  const airy = new Airy(grpcOptions);
+  const app = await airy.createMicroservice(OrderModule);
   app.listen(() => {
     logger.log('Microservice is listening...');
   });
